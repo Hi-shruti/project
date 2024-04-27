@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch App</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+   background-color: black;
+}
+
+.stopwatch {
+    font-size:1cm;
+}
+
+#display {
+    font-size: 3em;
+
+
+    display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 10rem;
+  border-radius: 20px;
+  width: 20cm;
+  margin-left: 10cm;
+
+}
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    justify-content: space-around;
+    border-radius: 15%;
+
+
+    margin: 10px;
+  margin-top: 10px;
+  border: none;
+  padding: 15px 30px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  border-radius: 5px;
+  cursor: pointer;
+   
+ 
+}
+
+/*#laps {
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    max-height: 300px;
+    height: 1cm;
+    overflow-y: auto;
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 1cm;
+    background-color: darkkhaki;
+}*/
+
+.laps{
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    max-height: 300px;
+    height: 1cm;
+  
+    padding: 10px;
+
+    
+}
+.name{
+    font-size:400%;
+    font-style:oblique;
+    color:white;
+    
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="stopwatch">
+        <div class="name">Stopwatch</div>
+        <h1 id="display" style="color:green">00:00:00</h1>
+        <button id="startPause"style="background-color: #e35209;">Start</button>
+        <button id="lap" style="background-color: yellow;">Lap</button>
+        <button id="reset" style="background-color: green;">Reset</button>
+        <ul id="laps" style="color:white"></ul>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        let timer;
+let isRunning = false;
+let startTime;
+let laps = [];
+
+function startPause() {
+    if (isRunning) {
+        clearInterval(timer);
+        isRunning = false;
+        document.getElementById("startPause").textContent = "Start";
+    } else {
+        startTime = Date.now() - (laps.length ? laps[laps.length - 1].time : 0);
+        timer = setInterval(updateDisplay, 10);
+        isRunning = true;
+        document.getElementById("startPause").textContent = "Pause";
+    }
+}
+
+function lap() {
+    if (isRunning) {
+        const lapTime = Date.now() - startTime;
+        laps.push({ time: lapTime });
+        const lapList = document.getElementById("laps");
+        const lapItem = document.createElement("li");
+        lapItem.textContent = formatTime(lapTime);
+        lapList.appendChild(lapItem);
+    }
+}
+
+function reset() {
+    clearInterval(timer);
+    isRunning = false;
+    document.getElementById("startPause").textContent = "Start";
+    document.getElementById("display").textContent = "00:00:00";
+    document.getElementById("laps").innerHTML = "";
+    laps = [];
+}
+
+function updateDisplay() {
+    const elapsedTime = Date.now() - startTime;
+    document.getElementById("display").textContent = formatTime(elapsedTime);
+}
+
+function formatTime(milliseconds) {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, "0");
+    const seconds = (totalSeconds % 60).toString().padStart(2, "0");
+    const centiseconds = Math.floor((milliseconds % 1000) / 10).toString().padStart(2, "0");
+    return `${minutes}:${seconds}:${centiseconds}`;
+}
+
+document.getElementById("startPause").addEventListener("click", startPause);
+document.getElementById("lap").addEventListener("click", lap);
+document.getElementById("reset").addEventListener("click", reset);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<html lang="en">
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Task5_weather_app_style.css">
+    <script src="Task5_weather_app_script.js" defer></script>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url("istockphoto-962500712-640x640.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 120vh;
+    width: 100vw;
+}
+
+.container-fluid {
+    width: 400px;
+    margin: 60px auto;
+    padding: 10px;
+}
+
+.inputs h1 {
+    text-align: center;
+    color: red;
+    font-family: sans-serif;
+    font-size: 30px;
+}
+
+.inputs {
+    padding: 2rem 0 2rem 0;
+    text-align: center;
+    justify-content: center;
+    background: transparent;
+
+
+}
+
+.inputs input[type="text"] {
+    height: 4rem;
+    width: 30rem;
+    background: #CCDDFF;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 10px;
+    border: none;
+    
+    margin-bottom: 1cm;
+
+    border: 2px solid #c2c2c2;
+    border-radius: 2px;
+    margin-right: 4px;
+
+}
+
+
+.inputs input[type="submit"] {
+    height: 3rem;
+    width: 8rem;
+    background: #0a67ca;
+    font-weight: bold;
+    color: white;
+    font-size: 1rem;
+    margin-top: 20px;
+    border: none;
+    border-radius: 7px;
+   
+.inputs input[type="submit"] a:hover{
+   color:rgb(239, 12, 12);
+   
+}
+
+.display {
+    text-align: center;
+    width: 400px;
+    color: #16a864;
+
+}
+
+.wrapper {
+    margin: 0 9rem;
+    background: transparent;
+    height: 45vh;
+    margin: 50px auto;
+    border-radius: 2px;
+}
+
+.wrapper h2 {
+    padding: 5px 0;
+    text-align: center;
+    background: transparent;
+    color: #003300;
+    font-family: sans-serif;
+    font-size: 26px;
+}
+
+.wrapper p {
+    margin: 20px 50px;
+    margin-right: 20px;
+    text-align: left;
+    color: #E6004C;
+    font-size: 23px;
+}
+
+.wrapper h2 span {
+    font-size: 26px;
+    color: #003300;
+}
+
+.wrapper p span {
+    color: #000099;
+    font-size: 25px;
+}
+
+.hd {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+    font-size: 100px;
+    font-style: italic;
+
+}
+    </style>
+</head>
+
+<body>
+    <br><br><br><br>
+    <div class="container-fluid">
+        <section class="main">
+            <h1 class="hd"style="color:red;text-align: center;font-size: 100px; ">Weather</h1>
+            <section class="inputs">
+                <input type="text" placeholder="Enter any city..." id="cityinput">
+                <input type="submit" value="Submit" id="add">
+                <button placeholder="submit" id="add"></button>
+            </section>
+            <section class="display">
+                <div class="wrapper">
+                    <h2 id="cityoutput"></h2>
+                    <p id="description"></p>
+                    <p id="temp"></p>
+                    <p id="wind"></p>
+                </div>
+            </section>
+        </section>
+    </div>
+</body>
+<script>
+    var inputval = document.querySelector('#cityinput')
+var btn = document.querySelector('#add');
+var city = document.querySelector('#cityoutput')
+var descrip = document.querySelector('#description')
+var temp = document.querySelector('#temp')
+var wind = document.querySelector('#wind')
+apik = "3045dd712ffe6e702e3245525ac7fa38"
+
+function convertion(val) {
+    return (val - 273).toFixed(2)
+}
+
+btn.addEventListener('click', function() {
+    fetch('https://api.openweathermap.org/data/2.5/weather?q=' + inputval.value + '&appid=' + apik)
+        .then(res => res.json())
+
+
+        .then(data => {
+            var nameval = data['name']
+            var descrip = data['weather']['0']['description']
+            var tempature = data['main']['temp']
+            var wndspd = data['wind']['speed']
+            city.innerHTML = `Weather of <span>${nameval}<span>`
+            temp.innerHTML = `Temperature: <span>${ convertion(tempature)} C</span>`
+            description.innerHTML = `Sky Conditions: <span>${descrip}<span>`
+            wind.innerHTML = `Wind Speed: <span>${wndspd} km/h<span>`
+
+        })
+
+        .catch(err => alert('You entered Wrong city name'))
+})
+</script>
+
+
+</html>
